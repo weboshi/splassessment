@@ -41,6 +41,7 @@ class Login extends Component {
 
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.renderRedirect= this.renderRedirect.bind(this);
 
     }
 
@@ -80,9 +81,11 @@ class Login extends Component {
       }
 
       renderRedirect = () => {
-        if (this.state.redirect) {
-          return <Redirect to='/' />
-        }
+ 
+          this.setState({
+              redirect: 1,
+          })
+   
       }
   
         handleSubmit(event) {
@@ -96,7 +99,6 @@ class Login extends Component {
                         password: this.state.password,
                     },
                 }).then(res => {
-                    console.log('beep')
                     const userInfo = res.data
                     console.log(userInfo)
                     if(res.data.code == 200){
@@ -110,6 +112,8 @@ class Login extends Component {
                           else { 
                             const ba = JSON.parse(localStorage.getItem('auth'))
                             console.log(ba)}
+                            this.renderRedirect()
+                            window.location.reload(false)
                     }
                 }).catch(error => {console.log(error)}
             )}
@@ -121,14 +125,17 @@ class Login extends Component {
         }
 
     render() {
+        if (this.state.redirect) 
+        return( <Redirect to="/" />)
+        else
         return (
+            
             <div className="login">
             <div className='login-header'>
                 <h2>Log in</h2>
                 </div>
                 <form onSubmit={this.handleSubmit}>
                 <div className="errorMsg">{this.state.formError}</div>
-                {this.state.redirect && this.renderRedirect()}
                     <Form.Group
                    
                     >

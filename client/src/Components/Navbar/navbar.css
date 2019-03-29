@@ -1,3 +1,30 @@
 .navbar-container {
     width: 100%;
 }
+
+.navlink {
+    text-decoration: none;
+    color: white !important;
+}
+
+.navlink:hover {
+    text-decoration: none;
+    color: white;
+}
+
+.nav-link:active {
+    text-decoration: none;
+    color: white;
+}
+
+.navlink-dd {
+    color: black;
+}
+
+#nav-dropdown {
+    color: white !important;
+}
+
+.navbar-dark .navbar-nav .nav-link {
+    color: white !important;
+}

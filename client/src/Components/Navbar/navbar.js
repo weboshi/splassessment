@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
+import { withRouter } from 'react-router'
 import { Navbar, MenuItem, NavItem, NavDropdown, Nav, Form, FormControl, Button } from 'react-bootstrap';
 import { LOGIN } from '../../Redux/actions/index'
 import { connect } from 'react-redux';
@@ -44,7 +46,9 @@ class NavigationBar extends Component {
 
     logOut() {
         localStorage.removeItem('auth')
+        this.props.history.push('/login')
         window.location.reload(true);
+
     }
 
     render() {
@@ -58,9 +62,9 @@ class NavigationBar extends Component {
                     </Navbar.Brand>
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
                         <Nav>
-                            <Nav.Link href="/">Home</Nav.Link>
-                            <Nav.Link href="/register">Register</Nav.Link>
-                            <Nav.Link href="/login">Login</Nav.Link>
+                            <Nav.Link><Link className='navlink' to="">Home</Link></Nav.Link>
+                            <Nav.Link><Link className='navlink' to="/register">Register</Link></Nav.Link>
+                            <Nav.Link><Link className='navlink' to="/login">Login</Link></Nav.Link>
                         </Nav>
     
                     </Navbar>
@@ -82,15 +86,15 @@ class NavigationBar extends Component {
                 </Navbar.Brand>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                     <Nav>
-                        <Nav.Link href="/">Home</Nav.Link>
-                        <Nav.Link href="/listings">All Posts</Nav.Link>
-                        <Nav.Link href="/myfeed">My Feed</Nav.Link>
-                        <Nav.Link href="/postlisting">Make Post</Nav.Link>
-                        <Nav.Link href="/users">Users</Nav.Link>
+                        <Nav.Link><Link className='navlink' to="/">Home</Link></Nav.Link>
+                        <Nav.Link><Link className='navlink' to="/listings">All Posts</Link></Nav.Link>
+                        <Nav.Link><Link className='navlink' to="/myfeed">My Feed</Link></Nav.Link>
+                        <Nav.Link><Link className='navlink' to="/postlisting">Make Post</Link></Nav.Link>
+                        <Nav.Link><Link className='navlink' to="/users">Users</Link></Nav.Link>
                         <NavDropdown title={username} id="basic-nav-dropdown">
-                            <NavDropdown.Item href="/profile">Profile</NavDropdown.Item>
-                            <NavDropdown.Item href="/userlistings">My Posts</NavDropdown.Item>
-                            <NavDropdown.Item href="/bookmarks">Follows</NavDropdown.Item>
+                            <NavDropdown.Item><Link className='navlink-dd' to="/profile">Profile</Link></NavDropdown.Item>
+                            <NavDropdown.Item><Link className='navlink-dd' to="/userlistings">My Posts</Link></NavDropdown.Item>
+                            <NavDropdown.Item><Link className='navlink-dd' to="/bookmarks">Following</Link></NavDropdown.Item>
                             <NavDropdown.Item onClick={this.logOut}>Logout</NavDropdown.Item>
                         </NavDropdown>
                     </Nav>
@@ -102,7 +106,7 @@ class NavigationBar extends Component {
     }
 }
 
-export const Navigation = connect(mapStateToProps, mapDispatchToProps)(NavigationBar);
+export const Navigation = connect(mapStateToProps, mapDispatchToProps)(withRouter(NavigationBar));
 
 
 

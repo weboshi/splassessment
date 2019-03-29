@@ -1,13 +1,10 @@
 const db = require("../models");
 const jwt = require('jsonwebtoken');
+const BCRYPT_SALT_ROUNDS = 12;
+const bcrypt = require('bcrypt');
+const secret = process.env.jwt
 // import jwtSecret from '../../jwtSecret'
 
-const BCRYPT_SALT_ROUNDS = 12;
-
-
-const bcrypt = require('bcrypt');
-
-const secret = process.env.jwt
 
 const controller = {
 findAllUsers: (req, res) => {
