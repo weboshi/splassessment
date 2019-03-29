@@ -1,0 +1,30 @@
+.viewlisting-label {
+    text-align: center;
+}
+
+.viewlisting-panel {
+    margin-top: 50px;
+    width: 70%;
+    background-color: white;
+}
+
+.viewlisting-container {
+    width: 100%;
+}
+
+.viewlisting-component {
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    width: 100%
+}
+
+.listing-label {
+    text-align: center;
+    border-bottom: 1px rgb(97, 97, 97) solid;
+    margin-bottom: 20px;
+}
+
+.viewlisting-information {
+    margin-bottom: 20px;
+}
