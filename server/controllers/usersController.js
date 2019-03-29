@@ -1,7 +1,6 @@
 const db = require("../models");
 const jwt = require('jsonwebtoken');
-import jwtSecret from '../../jwtSecret'
-import { resolveSoa } from 'dns';
+// import jwtSecret from '../../jwtSecret'
 
 const BCRYPT_SALT_ROUNDS = 12;
 
