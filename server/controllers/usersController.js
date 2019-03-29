@@ -7,7 +7,7 @@ const BCRYPT_SALT_ROUNDS = 12;
 
 const bcrypt = require('bcrypt');
 
-const secret = process.env.jwt|| jwtSecret
+const secret = process.env.jwt
 
 const controller = {
 findAllUsers: (req, res) => {
