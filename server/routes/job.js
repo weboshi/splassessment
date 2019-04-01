@@ -1,6 +1,5 @@
 import express from "express";
 import job from "../controllers/jobsController"
-import passport from "passport";
 
 const router = express.Router();
 

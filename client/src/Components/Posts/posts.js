@@ -5,7 +5,8 @@ import { Card, CardGroup, ListGroup, ListGroupItem, Button, FormControl } from '
 import { connect } from 'react-redux';
 import { DateTime } from 'luxon';
 import { Tweet } from '../Tweet/tweet';
-import './userlistings.css';
+import PropTypes from 'prop-types';
+import './posts.css';
 
 const mapDispatchToProps = dispatch => {
     return {
@@ -18,7 +19,7 @@ const mapDispatchToProps = dispatch => {
   };
 
 
-class UserListingsComponent extends Component { 
+class PostsComponent extends Component { 
     constructor(props){
         super(props);
         this.state = {
@@ -27,40 +28,38 @@ class UserListingsComponent extends Component {
         }
         this.handleChange = this.handleChange.bind(this)
         this.mapPosts = this.mapPosts.bind(this)
-        this.switchToCard = this.switchToCard.bind(this)
-        this.switchToPanel = this.switchToPanel.bind(this)
         this.formatDate = this.formatDate.bind(this)
 
     }
 
     componentDidMount() {
-            const username = this.props.user.username
-            console.log(username)
-            axios.get(`/api/job/myPosts/${username}`
-            ).then(res => {
-                console.log(res.data)
-                this.setState({
-                    userListings: res.data
-                })
-            }
-                ).catch(
-                    err => console.log(err)
-                )
+        axios({
+            method: 'get',
+            url: `/api/job/getJobs/`,
+        }).then(res => {
+            this.setState({
+                jobs: [res.data]
+            }, console.log(this.state.jobs))
+        }).catch(
+            err => console.log(err)
+        )
     }
 
-
     addBookmark(jobId) {
-        console.log(this.props.user.username)
+        console.log('job id' + jobId)
+        var username = this.props.user.username
         axios({
+            data: {
+                bookmark: jobId,
+            },
             method: 'put',
-            url: `/api/user/addbookmark/${jobId}`,
+            url: `/api/user/addbookmark/${username}`,
         }).then(res => {
             if(res.code == 200){
                 console.log("Bookmarked")
             }
         }).catch(
-            err => console.log(err)
-        )
+            err => console.log(err))
     }
 
     handleChange(e) {
@@ -78,26 +77,12 @@ class UserListingsComponent extends Component {
     }
 
     mapPosts() {
-        const myListings = this.state.userListings
+        const myJobs = this.state.jobs[0]
         return (
-            myListings.map((job, i) => 
-                <Tweet formatDate={() => this.formatDate(job.createdAt)} createdAt={job.createdAt} key={job.i} posting={job.posting} id={job.id} />
+            myJobs.map((job, i) => 
+                <Tweet formatDate={() => this.formatDate(job.createdAt)} createdAt={job.createdAt} key={i} posting={job.posting} id={job.id} />
             )
         )
-    }
-
-    switchToCard() {
-        this.setState({
-            panel: 0,
-            card: 1
-        }, () => console.log(this.state))
-    }
-
-    switchToPanel() {
-        this.setState({
-            panel: 1,
-            card: 0
-        }, () => console.log(this.state))
     }
 
     render(){
@@ -105,14 +90,22 @@ class UserListingsComponent extends Component {
             <div className='jobs-container'>
                 <div className='jobs-component'>
                     <div className='jobs-label'>
-                        <h3 className='jobs-header'>My Listings</h3>
+                        <h3 className='jobs-header'>All Posts</h3>
                     </div>
-                        {this.state.userListings && this.state.panel == true && this.mapPosts()}
-                        {!this.state.userListings && <div className="loading-icon"><i className="fas fa-spinner fa-spin"></i></div>}
+                        {this.state.jobs && this.state.panel == true && this.mapPosts()}
+                        {!this.state.jobs && <div className="loading-icon"><i className="fas fa-spinner fa-spin"></i></div>}
+
                 </div>
             </div>
         )
     }
 }
 
-export const UserListings =  connect(mapStateToProps, mapDispatchToProps)(UserListingsComponent)
+PostsComponent.propTypes = {
+    id: PropTypes.number,
+    formatDate: PropTypes.func,
+    posting: PropTypes.string,
+    key: PropTypes.number
+};
+
+export const Posts =  connect(mapStateToProps, mapDispatchToProps)(PostsComponent)

@@ -1,10 +1,6 @@
 import React from 'react';
-import './home-view.scss';
-import Map from '../../Components/Map/map'
-import { Jobs } from '../../Components/Jobs/jobs';
 import { WelcomeMessage } from '../../Components/WelcomeMessage/welcomemessage'
-
-
+import './home-view.scss';
 
 export default props =>
 

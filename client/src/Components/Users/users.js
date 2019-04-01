@@ -10,11 +10,11 @@ const mapDispatchToProps = dispatch => {
     return {
             UPDATEPROFILE: updatedInfo => dispatch(UPDATEPROFILE(updatedInfo))
     };
-  };
+};
 
-  const mapStateToProps = (state) => {
+const mapStateToProps = (state) => {
     return { user: state.user};
-  };
+};
 
 
 class UsersComponent extends Component { 
@@ -26,7 +26,6 @@ class UsersComponent extends Component {
         }
         this.handleChange = this.handleChange.bind(this)
         this.mapJobsAsPanels = this.mapJobsAsPanels.bind(this)
-        this.switchToCard = this.switchToCard.bind(this)
         this.switchToPanel = this.switchToPanel.bind(this)
         this.formatDate = this.formatDate.bind(this)
 
@@ -35,13 +34,24 @@ class UsersComponent extends Component {
     componentDidMount() {
         axios({
             method: 'get',
-            url: `/api/user/getUsers`,
-            }).then(res => {
-                console.log(res.data)
-                this.setState({
-                    userListings: res.data
-                })
-            }).catch(err => console.log(err))
+            url: `/api/user/getUserbookmarks/${this.props.user.username}`
+        }).then( res => {
+            console.log(res.data)
+            this.setState({
+                following: res.data
+            })
+        }).catch(err => console.log(err)).then(
+            axios({
+                method: 'get',
+                url: `/api/user/getUsers`,
+                }).then(res => {
+                    console.log(res.data)
+                    this.setState({
+                        userListings: res.data
+                    })
+                }).catch(err => console.log(err))
+            )  
+    
     }
 
 
@@ -78,25 +88,29 @@ class UsersComponent extends Component {
 
     mapJobsAsPanels() {
         const myListings = this.state.userListings
+        console.log(this.state.following)
         return (
             myListings.map((user, i) => 
-            <div className="jobs-panel" key={i}>
-                <span onClick={() => this.addBookmark(user.username)} className="bookmark">
-                    <i className="far fa-bookmark"></i>
-                </span>
-                <span className='format-date'>{this.formatDate(user.createdAt)}</span>
-                <a href={'/listing/' + user.username}>{user.username}</a>
-            </div>
-            )
+            (
+                (this.state.following.includes(user.username)) ?
+                    <div className="jobs-panel" key={i}>
+                    <span className="bookmark-following">
+                        <i className="fas fa-bookmark"></i>
+                    </span>
+                    <span className='format-date'>{this.formatDate(user.createdAt)}</span>
+                    <span>{user.username}</span>
+                </div>
+                :
+                <div className="jobs-panel" key={i}>
+                    <span onClick={() => this.addBookmark(user.username)} className="bookmark">
+                        <i className="far fa-bookmark"></i>
+                    </span>
+                    <span className='format-date'>{this.formatDate(user.createdAt)}</span>
+                    <span>{user.username}</span>
+                </div>
+                
+            ))
         )
-    }
-
-
-    switchToCard() {
-        this.setState({
-            panel: 0,
-            card: 1
-        }, () => console.log(this.state))
     }
 
     switchToPanel() {
@@ -115,8 +129,9 @@ class UsersComponent extends Component {
                     </div>
                         {this.state.userListings && this.state.panel == true && this.mapJobsAsPanels()}
                     <div className="loading">
-                        {!this.state.userListings && <div>Loading Users</div>}
-                        </div>
+                        {!this.state.userListings && <div className="loading-icon"><i className="fas fa-spinner fa-spin"></i></div>}
+                    </div>
+                    
                 </div>
             </div>
         )

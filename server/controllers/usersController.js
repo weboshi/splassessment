@@ -120,66 +120,67 @@ signIn: function (req, res) {
       res.send('Username not found')
     }
     else {
-    bcrypt.compare(req.body.password, user.password).then(function (pass) {
-      if (pass === true && req.body.username === user.username) {
-        console.log('hi')
+      bcrypt.compare(req.body.password, user.password).then(function (pass) {
+        if (pass === true && req.body.username === user.username) {
 
-        const currentUser = {
-          username: user.username,
-          email: user.email,
-          firstname: user.firstname,
-          lastname: user.lastname,
-          description: user.description
-        }
-      
-        const token = jwt.sign({
-          auth: currentUser.username,
-          agent: req.headers['user-agent'],
-          currentUser:{ currentUser },
-          exp: Math.floor(new Date().getTime() / 1000) + 7 * 24 * 60 * 60, // Note: in seconds!
-        }, secret);
+          const currentUser = {
+            username: user.username,
+            email: user.email,
+            firstname: user.firstname,
+            lastname: user.lastname,
+            description: user.description
+          }
+          const token = jwt.sign({
+            auth: currentUser.username,
+            agent: req.headers['user-agent'],
+            currentUser:{ currentUser },
+            exp: Math.floor(new Date().getTime() / 1000) + 7 * 24 * 60 * 60, // Note: in seconds!
+          }, secret);
 
-       
-        res.send({
-          "token": token,
-          "code":200,
-          "loggedIn": true,
-          "success":"Login successful",
-          "username": user.username,
-          "email": user.email,
-          "firstname": user.firstname,
-          "lastname": user.lastname,
-          "description": user.description
-            });
-        
-            
+          res.send({
+            "token": token,
+            "code":200,
+            "loggedIn": true,
+            "success":"Login successful",
+            "username": user.username,
+            "email": user.email,
+            "firstname": user.firstname,
+            "lastname": user.lastname,
+            "description": user.description
+              });
+          
       } else {
-        res.send("noMatch");
-        console.log('you got it wrong')
+        res.send("No Match");
       }
     }).catch(error => console.log(error))
   }
 })
 },
-
-  getUserPins: (req, res) => {
+  getUserFollows: (req, res) => {
     db.User.findOne({
       where: {
         username: req.params.username
       }
     })
     .then(user => {
-
       if(!user) {
-        res.send("no user")
+        res.send("No user found.")
+      }
+      else if (user.following === null) {
+        res.send("Not following anyone.")
+      } 
+      else if (user.following.indexOf(",") === -1 )
+      {
+        const userFollowing = [];
+        userFollowing.push(user.following)
+        res.send(userFollowing)
       }
       else {
-        console.log(user.pins)
-        const userPins = user.pins
-        res.send(JSON.parse(userPins))
+        const userFollowing = user.following.split(",")
+        res.send(userFollowing)
       }
     }
-      ).catch(res.status(422).json(err))
+      ).catch(err => res.status(422).json(err))
   },
   updateProfile: (req, res) => {
     db.User.update({
@@ -202,15 +203,14 @@ signIn: function (req, res) {
      jwt.verify(req.body.userToken, secret, function(err, decoded) {      
      if (err) {
        return res.json({ success: false, message: 'Failed to authenticate token.' });    
-     } else {
-
+     } 
+     else {
       //if everything is good, save to request for use in other routes
-       req.decoded = decoded;    
+      req.decoded = decoded;    
       authenticateUser= decoded.currentUser.currentUser.userId  
-        return authenticateUser   
+      return authenticateUser   
      }
    });
-  console.log( authenticateUser)
     db.User.findOne({
       where: {
         id:authenticateUser

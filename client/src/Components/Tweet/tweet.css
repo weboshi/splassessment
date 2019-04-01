@@ -1,0 +1,7 @@
+.tweet-panel {
+    margin-bottom: 5px;
+    padding: 5px;
+    background-color: white;
+    display: flex;
+    align-items: center;
+}

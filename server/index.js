@@ -13,7 +13,6 @@ export default path => {
   app.use(bodyParser.json());
 
   app.use(express.static(`${path}/client`));
-  app.use("/api/organization", routers.organization);
   app.use("/api/job", routers.job);
   app.use("/api/user", routers.user);
 

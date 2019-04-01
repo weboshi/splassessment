@@ -108,8 +108,8 @@ class BookmarksComponent extends Component {
                     </div>
                         {this.state.following && this.state.panel == true && this.mapJobsAsPanels()}
                     <div className="loading">
-                        {!this.state.following && <div>Loading Users</div>}
-                        </div>
+                        {!this.state.following && <div className="loading-icon"><i className="fas fa-spinner fa-spin"></i></div>}
+                    </div>
                 </div>
             </div>
         )

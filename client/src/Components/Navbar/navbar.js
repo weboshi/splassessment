@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { withRouter } from 'react-router'
-import { Navbar, MenuItem, NavItem, NavDropdown, Nav, Form, FormControl, Button } from 'react-bootstrap';
+import { Navbar, NavDropdown, Nav} from 'react-bootstrap';
 import { LOGIN } from '../../Redux/actions/index'
 import { connect } from 'react-redux';
+import { LinkContainer } from 'react-router-bootstrap';
 import './navbar.css'
 
 const mapStateToProps = (state) => {
@@ -27,14 +28,13 @@ class NavigationBar extends Component {
     }
 
     componentWillMount(){
-       if(localStorage.getItem('auth') === null){
+       if ( localStorage.getItem('auth') === null) {
             this.setState({
                 loggedIn: false
             })
             console.log("Not Authenticated")
         }
         else {
-
             const userInfo = JSON.parse(localStorage.getItem('auth'))
             this.props.LOGIN(userInfo)
             this.setState({
@@ -55,54 +55,49 @@ class NavigationBar extends Component {
         if (this.state.loggedIn === false) {
             return (
                 <div className="navbar-container">
-                <Navbar bg="primary" variant="dark" className="justify-content-around">
-                    <Navbar.Brand href="/">
-                        <i class="fab fa-twitter"></i>
-                        <span> FakeTwitter</span>
-                    </Navbar.Brand>
-                    <Navbar.Toggle aria-controls="basic-navbar-nav" />
-                        <Nav>
-                            <Nav.Link><Link className='navlink' to="">Home</Link></Nav.Link>
-                            <Nav.Link><Link className='navlink' to="/register">Register</Link></Nav.Link>
-                            <Nav.Link><Link className='navlink' to="/login">Login</Link></Nav.Link>
-                        </Nav>
-    
+                    <Navbar bg="primary" variant="dark" className="justify-content-around">
+                        <Navbar.Brand href="/">
+                            <i className="fab fa-twitter"></i>
+                            <span> FakeTwitter</span>
+                        </Navbar.Brand>
+                        <Navbar.Toggle aria-controls="basic-navbar-nav" />
+                            <Nav>
+                                <NavLink className='navlink' to="/">Home</NavLink>
+                                <NavLink className='navlink' to="/register">Register</NavLink>
+                                <NavLink className='navlink' to="/login">Login</NavLink>
+                            </Nav>
                     </Navbar>
                 </div>
         )
     }
-    else {
-        console.log(this.props)
-        console.log(this.state)
+        else {
         const email = this.props.user.email
         const username = this.props.user.username
-
-        return(
+        return (
             <div className="navbar-container">
-            <Navbar bg="primary" variant="dark" expand="lg" className="justify-content-around">
-                <Navbar.Brand href="/">
-                    <i class="fab fa-twitter"></i>
-                    <span> FakeTwitter</span>
-                </Navbar.Brand>
-                <Navbar.Toggle aria-controls="basic-navbar-nav" />
+                <Navbar bg="primary" variant="dark" expand="lg" className="justify-content-around">
+                    <Navbar.Brand href="/">
+                        <i className="fab fa-twitter"></i>
+                        <span> FakeTwitter</span>
+                    </Navbar.Brand>
+                    <Navbar.Toggle aria-controls="basic-navbar-nav" />
                     <Nav>
-                        <Nav.Link><Link className='navlink' to="/">Home</Link></Nav.Link>
-                        <Nav.Link><Link className='navlink' to="/listings">All Posts</Link></Nav.Link>
-                        <Nav.Link><Link className='navlink' to="/myfeed">My Feed</Link></Nav.Link>
-                        <Nav.Link><Link className='navlink' to="/postlisting">Make Post</Link></Nav.Link>
-                        <Nav.Link><Link className='navlink' to="/users">Users</Link></Nav.Link>
+                    <NavLink className="nav-link" exact to='/'>Home</NavLink>       
+                    <NavLink className="nav-link" to='/listings'>All Posts</NavLink>
+                    <NavLink className="nav-link" to='/myfeed'>My Feed</NavLink>             
+                    <NavLink className="nav-link" to='/postlisting'>Make Post</NavLink>
+                    <NavLink className="nav-link" to='/users'>Users</NavLink>
                         <NavDropdown title={username} id="basic-nav-dropdown">
-                            <NavDropdown.Item><Link className='navlink-dd' to="/profile">Profile</Link></NavDropdown.Item>
-                            <NavDropdown.Item><Link className='navlink-dd' to="/userlistings">My Posts</Link></NavDropdown.Item>
-                            <NavDropdown.Item><Link className='navlink-dd' to="/bookmarks">Following</Link></NavDropdown.Item>
-                            <NavDropdown.Item onClick={this.logOut}>Logout</NavDropdown.Item>
+                            <LinkContainer to="/profile"><NavDropdown.Item>Profile</NavDropdown.Item></LinkContainer>
+                            <LinkContainer to="/userlistings"><NavDropdown.Item>My Listings</NavDropdown.Item></LinkContainer>
+                            <LinkContainer to="/bookmarks"><NavDropdown.Item>Following</NavDropdown.Item></LinkContainer>
+                        <NavDropdown.Item onClick={this.logOut}>Logout</NavDropdown.Item>
                         </NavDropdown>
                     </Nav>
-
                 </Navbar>
             </div>
          )
-    }
+        }
     }
 }
 

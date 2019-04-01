@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
-import { Jobs } from '../../Components/Jobs/jobs';
-import './jobs-view.css';
+import { Posts } from '../../Components/Posts/posts';
+import './posts-view.css';
 
 
-export class JobsPage extends Component {
+export class PostsPage extends Component {
     render(){
         return(
             <div className='jobs-container'>
                 <div className='jobs-form'>
-                <Jobs/>
+                    <Posts/>
                 </div>
             </div>
         )
