@@ -89,7 +89,7 @@ class NavigationBar extends Component {
                     <NavLink className="nav-link" to='/users'>Users</NavLink>
                         <NavDropdown title={username} id="basic-nav-dropdown">
                             <LinkContainer to="/profile"><NavDropdown.Item>Profile</NavDropdown.Item></LinkContainer>
-                            <LinkContainer to="/userlistings"><NavDropdown.Item>My Listings</NavDropdown.Item></LinkContainer>
+                            <LinkContainer to="/userlistings"><NavDropdown.Item>My Posts</NavDropdown.Item></LinkContainer>
                             <LinkContainer to="/bookmarks"><NavDropdown.Item>Following</NavDropdown.Item></LinkContainer>
                         <NavDropdown.Item onClick={this.logOut}>Logout</NavDropdown.Item>
                         </NavDropdown>

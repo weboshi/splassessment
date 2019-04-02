@@ -21,6 +21,7 @@
 .jobs-label { 
     text-align: center;
     border-bottom: 1px rgb(97, 97, 97) solid;
+    padding: 10px;
 }
 
 .jobs-card {

@@ -126,6 +126,7 @@ class UsersComponent extends Component {
                 <div className='jobs-component'>
                     <div className='jobs-label'>
                         <h3 className='jobs-header'>Users</h3>
+                        <h7 className='jobs-subheader'>List of users.</h7>
                     </div>
                         {this.state.userListings && this.state.panel == true && this.mapJobsAsPanels()}
                     <div className="loading">

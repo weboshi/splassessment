@@ -1,5 +1,13 @@
 .navbar-container {
     width: 100%;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.navbar-brand {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 400;
+    font-size: 1.5em;
+    letter-spacing: .1em;
 }
 
 .navlink {

@@ -104,7 +104,7 @@ class Listing extends Component {
             <div className='form-container'>  
                 <div className='form-component'>
                     <div className='create-label'>
-                        <h1>Create a Post</h1>
+                        <h2>Create a Post</h2>
                     </div>
                     <Form>
                         <Form.Group controlId="exampleForm.ControlInput1">

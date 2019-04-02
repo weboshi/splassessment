@@ -105,7 +105,8 @@ class UserListingsComponent extends Component {
             <div className='jobs-container'>
                 <div className='jobs-component'>
                     <div className='jobs-label'>
-                        <h3 className='jobs-header'>My Listings</h3>
+                        <h3 className='jobs-header'>My Posts</h3>
+                        <h7>Posts you have made.</h7>
                     </div>
                         {this.state.userListings && this.state.panel == true && this.mapPosts()}
                         {!this.state.userListings && <div className="loading-icon"><i className="fas fa-spinner fa-spin"></i></div>}

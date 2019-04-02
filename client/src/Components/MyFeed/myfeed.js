@@ -99,6 +99,7 @@ class FeedComponent extends Component {
                 <div className='jobs-component'>
                     <div className='jobs-label'>
                         <h3 className='jobs-header'>My Feed</h3>
+                        <h7>Posts from users you are following.</h7>
                     </div>
                         {this.state.bookmarks && this.state.panel == true && this.mapPosts()}
                         {!this.state.bookmarks && <div className="loading-icon"><i className="fas fa-spinner fa-spin"></i></div>}
