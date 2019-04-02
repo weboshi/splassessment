@@ -16,18 +16,51 @@ findAllUsers: (req, res) => {
       .then(dbModel => res.json(dbModel))
       .catch(err => res.status(422).json(err));
 },
-removeBookmark: (req, res) => {
-    db.User.delete({
-      username: req.body.username,
-      email: req.body.email,
-      password: req.body.password
-    }, {
-      where: {
-        id: req.params.id
+removeBookmark: function(req, res) {
+  db.User.findOne({
+    where: {
+      username: req.params.username
+    }
+  })
+  .then(user => {
+    if (user.following === null) {
+      res.send("Not following anyone.")
+    }
+    else if (user.following.indexOf(",") === -1 ) {
+      console.log('hi')
+      if (user.following === req.body.bookmark) {
+          db.User.update({
+            following: null
+          }, {
+            where: {
+              username: req.params.username
+            }
+          })
       }
-    })
-    .then(dbModel => res.json(dbModel))
-    .catch(err => res.status(422).json(err))
+      else {
+        res.send("Not following.")
+    }}
+    else {
+      let arrayCheck = user.following.split(",")
+      let index = arrayCheck.indexOf(req.body.bookmark)
+  
+        if (index !== -1) {
+          arrayCheck.splice(index, 1).join()
+          db.User.update({
+            following: arrayCheck.join()
+          }, {
+            where: {
+              username: req.params.username
+            }
+          })
+        }
+        else {
+          res.send("Not following.")
+        }
+    }
+  })
+  .then(response => res.json(response))
+  .catch(err => res.status(422).json(err));
 },
 getBookmarks: (req, res) => {
   console.log(req.params.username)
@@ -65,10 +98,11 @@ addBookmark: function(req, res) {
   })
   .then(user => {
     let updatedBookmarks = user.following + "," + req.body.bookmark
-    if (req.params.username === req.body.username) {
+    if (req.body.bookmark === user.username) {
         res.send("You can't follow yourself!")
     }
     else if (user.following === null) {
+      console.log("First follow")
       db.User.update({
         following: req.body.bookmark
       }, {
@@ -78,6 +112,7 @@ addBookmark: function(req, res) {
       })
     }
     else if (user.following.indexOf(",") === -1 ) {
+      console.log('1st')
       if (user.following === req.body.bookmark) {
           res.send("Already following")
       }
@@ -92,6 +127,7 @@ addBookmark: function(req, res) {
       }
     }
     else {
+      console.log('2nd')
       let arrayCheck = user.following.split(",")
         if (arrayCheck.includes(req.body.bookmark)) {
           res.send("Already following")

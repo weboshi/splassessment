@@ -12,6 +12,7 @@ router.post("/signup", user.createUser);
 router.get("/auth", user.authUser);
 router.put("/addbookmark/:username", user.addBookmark)
 router.get("/bookmarks/:username", user.getBookmarks)
+router.put("/removebookmark/:username", user.removeBookmark)
 router.get("/getUsers", user.findAllUsers)
 
 export default router;

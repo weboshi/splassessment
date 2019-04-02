@@ -16,6 +16,28 @@ const mapStateToProps = (state) => {
     return { user: state.user};
 };
 
+const UserPanel = (props) => {
+    return(
+    <div className="jobs-panel">
+        <span onClick={() => props.onClick()} className="bookmark">
+        <i className="far fa-bookmark"></i>
+        </span>
+        <span className='format-date'>{props.formatDate()}</span>
+        <span>{props.username}</span>
+    </div>  
+    )}
+
+const UserPanelBookmarked = (props) => {
+    return (
+    <div className="jobs-panel">
+        <span onClick={() => props.onClick()} className="bookmark-following">
+            <i className="fas fa-bookmark"></i>
+        </span>
+        <span className='format-date'>{props.formatDate()}</span>
+        <span>{props.username}</span>
+    </div>
+    )}
+
 
 class UsersComponent extends Component { 
     constructor(props){
@@ -23,11 +45,14 @@ class UsersComponent extends Component {
         this.state = {
             panel: 1,
             card: 0,
+            refresh: 0,
         }
         this.handleChange = this.handleChange.bind(this)
         this.mapJobsAsPanels = this.mapJobsAsPanels.bind(this)
         this.switchToPanel = this.switchToPanel.bind(this)
         this.formatDate = this.formatDate.bind(this)
+        this.getFollows = this.getFollows.bind(this)
+        this.getUserList = this.getUserList.bind(this)
 
     }
 
@@ -35,25 +60,66 @@ class UsersComponent extends Component {
         axios({
             method: 'get',
             url: `/api/user/getUserbookmarks/${this.props.user.username}`
-        }).then( res => {
+        }).then(res => {
             console.log(res.data)
             this.setState({
                 following: res.data
             })
         }).catch(err => console.log(err)).then(
             axios({
-                method: 'get',
-                url: `/api/user/getUsers`,
-                }).then(res => {
-                    console.log(res.data)
-                    this.setState({
-                        userListings: res.data
-                    })
-                }).catch(err => console.log(err))
-            )  
-    
+            method: 'get',
+            url: `/api/user/getUsers`,
+            }).then(res => {
+                console.log(res.data)
+                this.setState({
+                    userListings: res.data
+                })
+            }).catch(err => console.log(err)))
     }
 
+    getFollows() {
+        console.log("Getting follows")
+        axios({
+            method: 'get',
+            url: `/api/user/getUserbookmarks/${this.props.user.username}`
+        }).then(res => {
+            console.log(res.data)
+            this.setState({
+                following: res.data
+            }, () => console.log(this.state))
+        }).catch(err => console.log(err))
+    }
+
+    getUserList() {
+        axios({
+            method: 'get',
+            url: `/api/user/getUsers`,
+            }).then(res => {
+                console.log(res.data)
+                this.setState({
+                    userListings: res.data
+                })
+            }).catch(err => console.log(err))
+    }
+
+    removeBookmark(userId) {
+        let username = this.props.user.username
+        axios({
+            data: {
+                bookmark: userId,
+            },
+            method: 'put',
+            url: `/api/user/removebookmark/${username}`,
+        }).then(res => {
+
+            if(res.status == 200){
+                console.log("Followed")
+                this.getFollows()
+            }
+        }).catch(
+            err => console.log(err)
+        )
+    }
 
     addBookmark(userId) {
         let username = this.props.user.username
@@ -64,8 +130,9 @@ class UsersComponent extends Component {
             method: 'put',
             url: `/api/user/addbookmark/${username}`,
         }).then(res => {
-            if(res.code == 200){
+            if(res.status == 200){
                 console.log("Followed")
+                this.getFollows()
             }
         }).catch(
             err => console.log(err)
@@ -88,29 +155,38 @@ class UsersComponent extends Component {
 
     mapJobsAsPanels() {
         const myListings = this.state.userListings
-        console.log(this.state.following)
-        return (
-            myListings.map((user, i) => 
-            (
-                (this.state.following.includes(user.username)) ?
-                    <div className="jobs-panel" key={i}>
-                    <span className="bookmark-following">
-                        <i className="fas fa-bookmark"></i>
-                    </span>
-                    <span className='format-date'>{this.formatDate(user.createdAt)}</span>
-                    <span>{user.username}</span>
-                </div>
-                :
-                <div className="jobs-panel" key={i}>
-                    <span onClick={() => this.addBookmark(user.username)} className="bookmark">
-                        <i className="far fa-bookmark"></i>
-                    </span>
-                    <span className='format-date'>{this.formatDate(user.createdAt)}</span>
-                    <span>{user.username}</span>
-                </div>
-                
-            ))
-        )
+        if (this.state.following) {
+            return (
+                myListings.map((user, i) => (
+                    (this.state.following.includes(user.username)) ?
+                    <UserPanelBookmarked
+                        user={this.props.user.username} 
+                        username={user.username} 
+                        key={i} 
+                        onClick={() => this.removeBookmark(user.username)}
+                        formatDate={() => this.formatDate(user.createdAt)}/>
+                    :
+                    <UserPanel
+                        user={this.props.user.username} 
+                        username={user.username} 
+                        key={i} 
+                        onClick={() => this.addBookmark(user.username)}
+                        formatDate={() => this.formatDate(user.createdAt)}/>    
+                ))
+            )
+        }
+        else {
+            return(
+                myListings.map((user, i) => (
+                    <UserPanel 
+                        username={user.username} 
+                        key={i} 
+                        onClick={() => this.addBookmark(user.username)}
+                        formatDate={() => this.formatDate(user.createdAt)}/> 
+                    ))
+            )
+        }
+  
     }
 
     switchToPanel() {
@@ -126,7 +202,7 @@ class UsersComponent extends Component {
                 <div className='jobs-component'>
                     <div className='jobs-label'>
                         <h3 className='jobs-header'>Users</h3>
-                        <h7 className='jobs-subheader'>List of users.</h7>
+                        <span>List of users.</span>
                     </div>
                         {this.state.userListings && this.state.panel == true && this.mapJobsAsPanels()}
                     <div className="loading">

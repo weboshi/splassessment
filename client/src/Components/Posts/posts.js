@@ -91,7 +91,7 @@ class PostsComponent extends Component {
                 <div className='jobs-component'>
                     <div className='jobs-label'>
                         <h3 className='jobs-header'>All Posts</h3>
-                        <h7>Posts from users.</h7>
+                        <span>Posts from users.</span>
                     </div>
                         {this.state.jobs && this.state.panel == true && this.mapPosts()}
                         {!this.state.jobs && <div className="loading-icon"><i className="fas fa-spinner fa-spin"></i></div>}

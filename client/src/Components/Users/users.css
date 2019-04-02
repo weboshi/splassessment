@@ -5,5 +5,6 @@
 .bookmark-following {
     color: rgba(204, 207, 0, 0.863);
     margin-right: 10px;
+    cursor: pointer;
 
 }

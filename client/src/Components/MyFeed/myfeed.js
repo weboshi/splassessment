@@ -88,7 +88,7 @@ class FeedComponent extends Component {
         const followingPosts = this.state.bookmarks
         return (
             followingPosts.map((job, i) => 
-                <Tweet formatDate={() => this.formatDate(job.createdAt)} createdAt={job.createdAt} key={job.i} posting={job.posting} id={job.id} />
+                <Tweet formatDate={() => this.formatDate(job.createdAt)} createdAt={job.createdAt} key={i} posting={job.posting} id={job.id} />
             )
         )
     }
@@ -99,7 +99,7 @@ class FeedComponent extends Component {
                 <div className='jobs-component'>
                     <div className='jobs-label'>
                         <h3 className='jobs-header'>My Feed</h3>
-                        <h7>Posts from users you are following.</h7>
+                        <span>Posts from users you are following.</span>
                     </div>
                         {this.state.bookmarks && this.state.panel == true && this.mapPosts()}
                         {!this.state.bookmarks && <div className="loading-icon"><i className="fas fa-spinner fa-spin"></i></div>}

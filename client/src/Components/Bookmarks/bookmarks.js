@@ -105,7 +105,7 @@ class BookmarksComponent extends Component {
                 <div className='jobs-component'>
                     <div className='jobs-label'>
                         <h3 className='jobs-header'>Following</h3>
-                        <h7>Users you are following.</h7>
+                        <span>Users you are following.</span>
                     </div>
                         {this.state.following && this.state.panel == true && this.mapJobsAsPanels()}
                     <div className="loading">
