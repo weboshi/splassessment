@@ -62,9 +62,10 @@ class NavigationBar extends Component {
                         </Navbar.Brand>
                         <Navbar.Toggle aria-controls="basic-navbar-nav" />
                             <Nav>
-                                <NavLink className='navlink' to="/">Home</NavLink>
-                                <NavLink className='navlink' to="/register">Register</NavLink>
-                                <NavLink className='navlink' to="/login">Login</NavLink>
+                                <NavLink className='nav-link' to="/">Home</NavLink>
+                                <NavLink className='nav-link' to="/register">Register</NavLink>
+                                <NavLink className='nav-link' to="/login">Login</NavLink>
+   
                             </Nav>
                     </Navbar>
                 </div>
@@ -82,11 +83,11 @@ class NavigationBar extends Component {
                     </Navbar.Brand>
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
                     <Nav>
-                    <NavLink className="nav-link" exact to='/'>Home</NavLink>       
-                    <NavLink className="nav-link" to='/listings'>All Posts</NavLink>
-                    <NavLink className="nav-link" to='/myfeed'>My Feed</NavLink>             
-                    <NavLink className="nav-link" to='/postlisting'>Make Post</NavLink>
-                    <NavLink className="nav-link" to='/users'>Users</NavLink>
+                        <NavLink className="nav-link" exact to='/'>Home</NavLink>       
+                        <NavLink className="nav-link" to='/listings'>All Posts</NavLink>
+                        <NavLink className="nav-link" to='/myfeed'>My Feed</NavLink>             
+                        <NavLink className="nav-link" to='/postlisting'>Make Post</NavLink>
+                        <NavLink className="nav-link" to='/users'>Users</NavLink>
                         <NavDropdown title={username} id="basic-nav-dropdown">
                             <LinkContainer to="/profile"><NavDropdown.Item>Profile</NavDropdown.Item></LinkContainer>
                             <LinkContainer to="/userlistings"><NavDropdown.Item>My Posts</NavDropdown.Item></LinkContainer>
